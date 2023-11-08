@@ -1,7 +1,7 @@
 CREATE TABLE users
 (
     id              INT(10) PRIMARY KEY AUTO_INCREMENT,
-    login           VARCHAR(30),
+    login           VARCHAR(30) UNIQUE,
     password_hashed VARCHAR(255)
 );
 
