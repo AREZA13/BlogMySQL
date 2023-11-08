@@ -18,7 +18,7 @@ $logger->pushHandler(new StreamHandler('../logs/monolog.log', Level::Warning));
 
 try {
     $dbConnectionDsnString = "mysql:host=" . MYSQL_SERVER_NAME . ";dbname=" . MYSQL_DATABASE;
-    $pdo = new PDO($dbConnectionDsnString, MYSQL_USER, MYSQL_ROOT_PASSWORD);
+    $pdo = new PDO($dbConnectionDsnString, MYSQL_USER, MYSQL_PASSWORD);
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 } catch (Throwable $e) {
     throw new PDOException("Connection failed. Throwable name: '" . $e::class . "'. Message : " . $e->getMessage());
