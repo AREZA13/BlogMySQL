@@ -3,14 +3,17 @@ declare(strict_types=1);
 require_once dirname(__DIR__, 1) . DIRECTORY_SEPARATOR . "config" . DIRECTORY_SEPARATOR . "global.php";
 
 use App\Controller;
+use App\View;
 use Monolog\Handler\StreamHandler;
 use Monolog\Level;
 use Monolog\Logger;
 use App\Db;
 
-$actual_link = $_SERVER['REQUEST_URI'];
+session_start();
 
-$parsedActualLink = explode('/', $actual_link);
+$actualLink = $_SERVER['REQUEST_URI'];
+
+$parsedActualLink = explode('/', $actualLink);
 $firstElement = $parsedActualLink[1];
 $secondElement = $parsedActualLink[2];
 $logger = new Logger('monolog');
@@ -26,11 +29,24 @@ try {
 
 $db = new Db($pdo);
 
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    if ($firstElement == 'register') {
+        (new Controller\User($logger, $db))->register();
+    } elseif ($firstElement == 'login') {
+        (new Controller\User($logger, $db))->login();
+    }
+}
+
+if (!isset($_SESSION['user_id'])) {
+    View::loginAndCreateForm();
+}
+
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-    if (($firstElement == 'article' && !empty($secondElement))) {
-        (new Controller\Article($logger, $db))->getById((int)$secondElement);
-    } elseif ($firstElement == 'article' && empty($secondElement)) {
+    if (empty($firstElement) && empty($secondElement)) {
         (new Controller\Article($logger, $db))->getAll();
+    } elseif ($firstElement == 'article' && !empty($secondElement)) {
+        (new Controller\Article($logger, $db))->getById((int)$secondElement);
     } elseif ($firstElement == 'user' && !empty($secondElement)) {
         (new Controller\User($logger, $db))->getById((int)$secondElement);
     } elseif ($firstElement == 'user' && empty($secondElement)) {
