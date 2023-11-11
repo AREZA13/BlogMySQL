@@ -54,12 +54,16 @@ class View
         $articlesTableRows = '';
 
         foreach ($articles as $article) {
+            $editButtonIfNeeded = ((int)$article['user_id'] === $_SESSION['user_id'])
+                                 ? "<a href='articleEdit/" . $article['id'] . "' class='btn btn-info btn-lg'>Edit</a>"
+                                 : '';
+
             $articlesTableRows .= "<tr> 
             <td> " . $article['id'] . "</td>
-            <td>  " . $article['title'] . "</td>
+            <td> " . $article['title'] . "</td>
             <td> " . $article['content'] . " </td>
             <td> " . $article['user_id'] . " </td>
-            <td> <a href='article/" . $article['id'] . "' class='btn btn-warning btn-lg'>View</a></td>
+            <td> <a href='article/" . $article['id'] . "' class='btn btn-warning btn-lg'>View</a>" . $editButtonIfNeeded . "</td>
         </tr>";
         }
 
@@ -108,14 +112,13 @@ class View
                 <div class="container mt-5"> 
                 ' . "<h1 class='text-center'>User # " . $user['id'] . " (user Login #" . $user['login'] . ")</h1>
                 <h2 class='pt-5 text-center'>" . $user['password_hashed'] . "</h2>
-                <p>" . $user['content'] . '</p> ' . self::generateHtmlEnd() . '
-                </div>';
+                <p>" . $user['content'] . '</p></div>' . self::generateHtmlEnd();
         exit();
     }
 
     public static function createArticle(): never
     {
-        echo '<h1 class="text-center">Create article</h1>
+        echo self::generateHtmlStart() . '<div class="container-sm text-center"><h1 class="text-center">Create article</h1>
         <form action="/article" method="post">            
             <div class="row">
                 <div class="col">
@@ -138,11 +141,41 @@ class View
                 <button type="submit" name="submit" class="btn btn-primary btn-lg m-4">Submit</button>
             </div>
         
-        </form>';
+        </form></div>' . self::generateHtmlEnd();
         exit();
     }
 
-    public static function loginAndCreateForm(): never
+    public static function articleEdit(array $article): never
+    {
+        echo  self::generateHtmlStart() . '<h1 class="text-center">Edit article</h1>
+        <form action="/articleEdit" method="post">
+            <input name="article_id" id="article_id" type="number" value="'. $article['id'] . '" class="form-control" required hidden="hidden">
+            <div class="row">
+                <div class="col">
+                    <label class="form-label" for="title">Title</label>
+                    <input name="title" id="title" placeholder="Most original title"
+                           type="text" value="'. $article['title'] . '" maxlength="60" class="form-control" required>
+                    <div class="invalid-feedback">No more than 60 symbols</div>
+                </div>
+            </div>
+        
+            <div class="row mt-2">
+                <div class="col">
+                    <label class="form-label" for="content">Content</label>
+                    <textarea name="content" id="content" placeholder="Most talented content"
+                              rows="5" class="form-control" required>'. $article['content'] . '</textarea>
+                </div>
+            </div>
+        
+            <div class="d-flex justify-content-center">
+                <button type="submit" name="submit" class="btn btn-primary btn-lg m-4">Submit</button>
+            </div>
+        
+        </form>' . self::generateHtmlEnd();
+        exit();
+    }
+
+    public static function loginAndRegisterForm(): never
     {
         echo self::generateHtmlStart() . '<form action="/register" method="post">
                     <div class="mb-3 row">

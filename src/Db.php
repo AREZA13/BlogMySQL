@@ -21,6 +21,13 @@ class Db
         return $pdoStatement->fetch(PDO::FETCH_ASSOC);
     }
 
+    public function updateArticle(int $article_id, string $title, string $content, int $user_id): bool
+    {
+        $sql = "UPDATE articles SET title = :title, content = :content WHERE id = :articleId AND user_id = :user_id";
+        $pdoStatement = $this->pdo->prepare($sql, [PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY]);
+        return $pdoStatement->execute([':title' => $title, ':content' => $content, ':articleId' => $article_id, ':user_id' => $user_id]);
+    }
+
     public function getArticleAll(): array|false
     {
         $sql = "SELECT * FROM articles";
@@ -29,7 +36,7 @@ class Db
         return $pdoStatement->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    public function createArticle(string $title, string $content, string|int $user_id): bool
+    public function createArticle(string $title, string $content, int $user_id): bool
     {
         try {
             $sql = "INSERT INTO articles (title, content, user_id) VALUES (?, ?, ?)";

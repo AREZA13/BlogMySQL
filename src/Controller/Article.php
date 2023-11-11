@@ -26,18 +26,38 @@ class Article
         View::articleAll($articles);
     }
 
-    public function showArticleTemplate(): never
+    public function showCreateArticleTemplate(): never
     {
         View::createArticle();
+    }
+
+    public function showEditArticleTemplate(int $id): never
+    {
+        $article = $this->db->getArticleById($id);
+        View::articleEdit($article);
     }
 
     public function createArticle(): never
     {
         $title = $_POST['title'];
         $content = $_POST['content'];
-        $user_id = $_SESSION['user_id'];
+        $user_id = (int)$_SESSION['user_id'];
 
         if ($this->db->createArticle($content, $title, $user_id)) {
+            header("Location: /");
+        }
+
+        exit();
+    }
+
+    public function updateArticle(): never
+    {
+        $title = $_POST['title'];
+        $content = $_POST['content'];
+        $user_id = (int)$_SESSION['user_id'];
+        $article_id = (int)$_POST['article_id'];
+
+        if ($this->db->updateArticle($article_id, $title, $content, $user_id)) {
             header("Location: /");
         }
 

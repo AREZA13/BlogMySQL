@@ -37,11 +37,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         (new Controller\User($logger, $db))->login();
     } elseif ($firstElement == 'article') {
         (new Controller\Article($logger, $db))->createArticle();
+    } elseif ($firstElement == 'articleEdit') {
+        (new Controller\Article($logger, $db))->updateArticle();
     }
 }
 
 if (!isset($_SESSION['user_id'])) {
-    View::loginAndCreateForm();
+    View::loginAndRegisterForm();
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
@@ -54,7 +56,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     } elseif ($firstElement == 'user' && empty($secondElement)) {
         echo "Enter User ID in url like user/1";
     } elseif ($firstElement == 'create-article' && empty($secondElement)) {
-        (new Controller\Article($logger, $db))->showArticleTemplate();
+        (new Controller\Article($logger, $db))->showCreateArticleTemplate();
+    } elseif ($firstElement == 'articleEdit' && !empty($secondElement)) {
+        (new Controller\Article($logger, $db))->showEditArticleTemplate((int)$secondElement);
     }
 }
 
