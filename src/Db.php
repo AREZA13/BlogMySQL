@@ -29,6 +29,26 @@ class Db
         return $pdoStatement->fetchAll(PDO::FETCH_ASSOC);
     }
 
+    public function createArticle(string $title, string $content, string|int $user_id): bool
+    {
+        try {
+            $sql = "INSERT INTO articles (title, content, user_id) VALUES (?, ?, ?)";
+            $pdoStatement = $this->pdo->prepare($sql);
+            return $pdoStatement->execute([$title, $content, $user_id]);
+        } catch (PDOException $exception) {
+            return false;
+        }
+    }
+
+    public function deleteArticle(int $id): bool
+    {
+
+        $sql = "DELETE FROM articles WHERE id = :articleId";
+        $pdoStatement = $this->pdo->prepare($sql, [PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY]);
+        return $pdoStatement->execute(['articleId' => $id]);
+    }
+
+
     public function getUserById(int $id): array|false
     {
         $sql = "SELECT * FROM users WHERE id = :userId";

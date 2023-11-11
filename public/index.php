@@ -35,6 +35,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         (new Controller\User($logger, $db))->register();
     } elseif ($firstElement == 'login') {
         (new Controller\User($logger, $db))->login();
+    } elseif ($firstElement == 'article') {
+        (new Controller\Article($logger, $db))->createArticle();
     }
 }
 
@@ -50,6 +52,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     } elseif ($firstElement == 'user' && !empty($secondElement)) {
         (new Controller\User($logger, $db))->getById((int)$secondElement);
     } elseif ($firstElement == 'user' && empty($secondElement)) {
-        echo "Enter User ID in url";
+        echo "Enter User ID in url like user/1";
+    } elseif ($firstElement == 'create-article' && empty($secondElement)) {
+        (new Controller\Article($logger, $db))->showArticleTemplate();
+    }
+}
+
+if ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
+    if ($firstElement == 'article' && !empty($secondElement)) {
+        (new Controller\Article($logger, $db))->deleteArticle((int)$secondElement);
     }
 }

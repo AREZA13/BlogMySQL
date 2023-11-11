@@ -40,7 +40,11 @@ class View
         echo self::generateHtmlStart() . "<div class='container mt-5'>
               <h1 class='text-center'>Article # " . $article['id'] . " (created by user #" . $article['user_id'] . ")</h1>
               <h2 class='pt-5 text-center'>" . $article['title'] . "</h2>
-              <p>" . $article['content'] . '</p></div>
+              <p>" . $article['content'] . '</p>
+              <button type="button" class="btn btn-info" onclick="'
+            . "fetch('/article/" . $article['id'] . "', { method: 'DELETE' }).then(() => window.location.replace('/') );"
+            . '">Delete</button> 
+             </div>
               ' . self::generateHtmlEnd();
         exit();
     }
@@ -55,6 +59,7 @@ class View
             <td>  " . $article['title'] . "</td>
             <td> " . $article['content'] . " </td>
             <td> " . $article['user_id'] . " </td>
+            <td> <a href='article/" . $article['id'] . "' class='btn btn-warning btn-lg'>View</a></td>
         </tr>";
         }
 
@@ -82,6 +87,7 @@ class View
         <th>Title</th>
         <th>Content</th>
         <th>User ID</th>
+        <th>Button</th>
     </tr>
     </thead>
    
@@ -107,16 +113,14 @@ class View
         exit();
     }
 
-    public static function articleCreateForm(): never
+    public static function createArticle(): never
     {
         echo '<h1 class="text-center">Create article</h1>
-        <form action="" method="post">     
-            <input type="hidden" name="<?= NEW_ARTICLE_KEY_NAME ?>" value="true">
-        
+        <form action="/article" method="post">            
             <div class="row">
                 <div class="col">
-                    <label class="form-label" for="<?= TITLE_KEY_NAME ?>">Title</label>
-                    <input name="<?= TITLE_KEY_NAME ?>" id="<?= TITLE_KEY_NAME ?>" placeholder="Most original title"
+                    <label class="form-label" for="title">Title</label>
+                    <input name="title" id="title" placeholder="Most original title"
                            type="text" maxlength="60" class="form-control" required>
                     <div class="invalid-feedback">No more than 60 symbols</div>
                 </div>
@@ -124,8 +128,8 @@ class View
         
             <div class="row mt-2">
                 <div class="col">
-                    <label class="form-label" for="<?= CONTENT_KEY_NAME ?>">Content</label>
-                    <textarea name="<?= CONTENT_KEY_NAME ?>" id="<?= CONTENT_KEY_NAME ?>" placeholder="Most talented content"
+                    <label class="form-label" for="content">Content</label>
+                    <textarea name="content" id="content" placeholder="Most talented content"
                               rows="5" class="form-control" required></textarea>
                 </div>
             </div>
@@ -141,7 +145,6 @@ class View
     public static function loginAndCreateForm(): never
     {
         echo self::generateHtmlStart() . '<form action="/register" method="post">
-                    <input type="hidden" name="register" value="1">
                     <div class="mb-3 row">
                         <label for="login" class="col-sm-2 col-form-label">Login</label>
                         <div class="col-sm-10">
