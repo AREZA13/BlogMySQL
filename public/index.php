@@ -35,15 +35,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         (new Controller\User($logger, $db))->register();
     } elseif ($firstElement == 'login') {
         (new Controller\User($logger, $db))->login();
-    } elseif ($firstElement == 'article') {
-        (new Controller\Article($logger, $db))->createArticle();
-    } elseif ($firstElement == 'articleEdit') {
-        (new Controller\Article($logger, $db))->updateArticle();
     }
 }
 
 if (!isset($_SESSION['user_id'])) {
     View::loginAndRegisterForm();
+}
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+   if ($firstElement == 'article' && isset($_SESSION['user_id'])) {
+        (new Controller\Article($logger, $db))->createArticle();
+    } elseif ($firstElement == 'articleEdit') {
+        (new Controller\Article($logger, $db))->updateArticle();
+    }
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
