@@ -18,6 +18,7 @@ My first test blog without framework. PHP & MySQL
 <li> Registration is available. To register, just specify your username and password </li>
 <li> Authorization available. Authorized users can log in by entering their username and password </li>
 <li> Authorized users can publish, edit, and delete articles </li>
+<li> It is possible to search for articles, which is carried out in the database via LIKE '%$search%' </li>
 <li> Based on Bootstrap 5 </li>
 
 <em> Example of a home page for an authorized user </em>
