@@ -55,6 +55,13 @@ class Db
         return $pdoStatement->execute(['articleId' => $id]);
     }
 
+    public function getArticleBySearch(string $search): array
+    {
+        $sql = "SELECT * FROM articles WHERE title LIKE :search OR content LIKE :search";
+        $sth = $this->pdo->prepare($sql, [PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY]);
+        $sth->execute(['search' => "%$search%"]);
+        return $sth->fetchAll(PDO::FETCH_ASSOC);
+    }
 
     public function getUserById(int $id): array|false
     {

@@ -11,7 +11,7 @@ class User
 {
     public function __construct(
         private readonly Logger $logger,
-        private readonly Db $db
+        private readonly Db     $db
     )
     {
     }

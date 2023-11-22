@@ -12,7 +12,6 @@ use App\Db;
 session_start();
 
 $actualLink = $_SERVER['REQUEST_URI'];
-
 $parsedActualLink = explode('/', $actualLink);
 $firstElement = $parsedActualLink[1];
 $secondElement = $parsedActualLink[2];
@@ -43,7 +42,7 @@ if (!isset($_SESSION['user_id'])) {
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-   if ($firstElement == 'article' && isset($_SESSION['user_id'])) {
+    if ($firstElement == 'article' && isset($_SESSION['user_id'])) {
         (new Controller\Article($logger, $db))->createArticle();
     } elseif ($firstElement == 'articleEdit') {
         (new Controller\Article($logger, $db))->updateArticle();
@@ -63,6 +62,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
         (new Controller\Article($logger, $db))->showCreateArticleTemplate();
     } elseif ($firstElement == 'articleEdit' && !empty($secondElement)) {
         (new Controller\Article($logger, $db))->showEditArticleTemplate((int)$secondElement);
+    } elseif (!empty($_GET['search'])) {
+        (new Controller\Article($logger, $db))->searchByQuery();
     }
 }
 

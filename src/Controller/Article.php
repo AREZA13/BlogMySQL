@@ -73,5 +73,17 @@ class Article
 
         exit();
     }
+
+    public function searchByQuery() : never
+    {
+        try {
+            $search = $_GET['search'];
+            $articles = $this->db->getArticleBySearch($search);
+            View::articleAll($articles);
+            }catch (\Exception $e){}
+
+    exit();
+    }
+
 }
 

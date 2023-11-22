@@ -55,8 +55,8 @@ class View
 
         foreach ($articles as $article) {
             $editButtonIfNeeded = ((int)$article['user_id'] === $_SESSION['user_id'])
-                                 ? "<a href='articleEdit/" . $article['id'] . "' class='btn btn-info btn-lg'>Edit</a>"
-                                 : '';
+                ? "<a href='articleEdit/" . $article['id'] . "' class='btn btn-info btn-lg'>Edit</a>"
+                : '';
 
             $articlesTableRows .= "<tr> 
             <td> " . $article['id'] . "</td>
@@ -77,11 +77,10 @@ class View
             . count($articles) . '</h2>
                 <div class="row justify-content-end">
     <div class="mw-50" style="width: 400px;">
-        <form class="input-group" action="/">
-            <input type="text" id="<?= SEARCH_KEY_NAME ?>" name="<?= SEARCH_KEY_NAME ?>" class="form-control rounded"
-                   placeholder="Search by title" aria-label="Search"/>
-            <button type="submit" class="btn btn-primary rounded">search</button>
-        </form>
+                <form class="input-group" action="/" method="GET">
+                <input type="text" id="search" name="search" class="form-control rounded" placeholder="Search by title or content" aria-label="Search"/>
+                <button type="submit" class="btn btn-primary rounded">Search</button>
+                </form>
     </div>
 </div>
     <table class="table table-hover">
@@ -147,14 +146,14 @@ class View
 
     public static function articleEdit(array $article): never
     {
-        echo  self::generateHtmlStart() . '<h1 class="text-center">Edit article</h1>
+        echo self::generateHtmlStart() . '<h1 class="text-center">Edit article</h1>
         <form action="/articleEdit" method="post">
-            <input name="article_id" id="article_id" type="number" value="'. $article['id'] . '" class="form-control" required hidden="hidden">
+            <input name="article_id" id="article_id" type="number" value="' . $article['id'] . '" class="form-control" required hidden="hidden">
             <div class="row">
                 <div class="col">
                     <label class="form-label" for="title">Title</label>
                     <input name="title" id="title" placeholder="Most original title"
-                           type="text" value="'. $article['title'] . '" maxlength="60" class="form-control" required>
+                           type="text" value="' . $article['title'] . '" maxlength="60" class="form-control" required>
                     <div class="invalid-feedback">No more than 60 symbols</div>
                 </div>
             </div>
@@ -163,7 +162,7 @@ class View
                 <div class="col">
                     <label class="form-label" for="content">Content</label>
                     <textarea name="content" id="content" placeholder="Most talented content"
-                              rows="5" class="form-control" required>'. $article['content'] . '</textarea>
+                              rows="5" class="form-control" required>' . $article['content'] . '</textarea>
                 </div>
             </div>
         
